@@ -1,17 +1,39 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import org.example.io.FileHandler;
+import org.example.model.Movie;
+import org.example.model.User;
+import org.example.service.Recommendation;
+
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        String movieFile = "movies.txt";
+        String userFile = "users.txt";
+        String outputFile = "recommendations.txt";
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        try {
+
+            List<Movie> movies = FileHandler.readMovies(movieFile);
+            List<User> users = FileHandler.readUsers(userFile);
+
+            Recommendation engine = new Recommendation();
+            engine.generateRecommendations(users, movies, outputFile);
+
+            System.out.println("Success! Recommendations generated.");
+
+        } catch (Exception e) {
+
+
+            String errorMsg = e.getMessage();
+
+            if (errorMsg != null && errorMsg.startsWith("ERROR:")) {
+                FileHandler.writeError(outputFile, errorMsg);
+                System.err.println("Validation Failed. detailed error written to " + outputFile);
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 }
