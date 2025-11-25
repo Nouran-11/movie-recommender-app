@@ -178,21 +178,21 @@ public class FileHandlerTest {
     }
 
     // ----------------------- 9. TRIM SPACES -----------------------
-    //@Test
-//    void testReadUsers_TrimSpaces() throws Exception {
-//        String fileContent =
-//                "   Alice   ,12345678A\n" +
-//                        "MTR123,MAT456\n";
-//
-//        File temp = createTempFile(fileContent);
-//
-//        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
-//
-//        //assertEquals(1, users.size());
-//        //assertEquals("   Alice   ", users.get(0).getName());
-//        //assertEquals("12345678A", users.get(0).getId());
-//        //assertEquals("MTR123", users.get(0).getLikedMovieIds().get(0));
-//    }
+    @Test
+    void testReadUsers_TrimSpaces() throws Exception {
+        String fileContent =
+                "   Alice   ,12345678A\n" +
+                        "MTR123,MAT456\n";
+
+        File temp = createTempFile(fileContent);
+
+        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
+
+        //assertEquals(1, users.size());
+        //assertEquals("   Alice   ", users.get(0).getName());
+        //assertEquals("12345678A", users.get(0).getId());
+        //assertEquals("MTR123", users.get(0).getLikedMovieIds().get(0));
+    }
 
     // ----------------------- 10. SECOND LINE WITH SPACES ONLY -----------------------
     @Test
