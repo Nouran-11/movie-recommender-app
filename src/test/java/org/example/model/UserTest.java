@@ -20,6 +20,12 @@ public class UserTest {
         assertTrue(movies.contains("M001"));
         assertTrue(movies.contains("M002"));
     }
+    // -----------------------------
+    // MovieId validation Tests
+    // -----------------------------
+    void testMovieId(){
+        assertFalse(User.isValidMovieId(" "));
+    }
 
     // -----------------------------
     // UserName validation Tests
