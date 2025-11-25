@@ -1,7 +1,5 @@
 package org.example.io;
 
-
-
 import org.example.model.Movie;
 import org.example.model.User;
 
