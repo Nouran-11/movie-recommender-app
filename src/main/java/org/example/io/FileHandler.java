@@ -30,7 +30,10 @@ public class FileHandler {
 
 
                 if (!Movie.isValidTitle(title)) {
-                    throw new Exception("ERROR: Movie Title " + title + " is wrong");
+                    throw new Exception(
+                            "ERROR: Movie Title {movie_title} is wrong".replace("{movie_title}", title)
+                    );
+
                 }
 
                 String idValidation = Movie.validateId(id, title);
