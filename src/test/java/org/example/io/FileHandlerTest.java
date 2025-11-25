@@ -55,7 +55,7 @@ class FileHandlerTest {
 
         List<Movie> movies = FileHandler.readMovies(tempFile.toString());
 
-        assertNotEquals(3, movies.size());
+        assertEquals(2, movies.size());
         assertNotEquals("avatar", movies.get(1).getTitle());
         assertEquals("A456", movies.get(1).getId());
         assertEquals("Fantasy", movies.get(1).getGenre());
@@ -114,5 +114,46 @@ class FileHandlerTest {
 
         assertEquals("ERROR: Movie Title 123WrongTitle is wrong", ex.getMessage());
     }
+    @Test
+    void testReadMovies_EmptyFile_ReturnsEmptyList() throws Exception {
+        tempFile = Files.createTempFile("movies", ".txt");
+        Files.write(tempFile, new byte[0]);
+
+        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
+
+        assertTrue(movies.isEmpty());
+    }
+    @Test
+    void testReadMovies_OnlyOneLine_NoGenre_ReturnsEmptyList() throws Exception {
+        tempFile = Files.createTempFile("movies", ".txt");
+
+        String data = "The Matrix, TM263\n";  // No second line
+
+        Files.write(tempFile, data.getBytes());
+
+        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
+
+        assertEquals(0, movies.size());
+    }
+    @Test
+    void testReadMovies_InvalidIdNumbers_ThrowsException() throws Exception {
+        tempFile = Files.createTempFile("movies", ".txt");
+
+        String data =
+                "The Matrix, TM2A3\n" +  // Invalid number format
+                        "Action\n";
+
+        Files.write(tempFile, data.getBytes());
+
+        Exception ex = assertThrows(Exception.class, () ->
+                FileHandler.readMovies(tempFile.toString())
+        );
+
+        assertEquals(
+                "ERROR: Movie Id numbers TM2A3 aren't unique",
+                ex.getMessage()
+        );
+    }
+
 
 }
