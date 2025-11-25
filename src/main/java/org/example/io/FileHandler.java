@@ -56,7 +56,7 @@ public class FileHandler {
                 if (line2 == null) break;
 
                 String[] parts = line1.split(",");
-                String name = parts[0].trim();
+                String name = parts[0];
                 String id = parts[1].trim();
 
                 if (!User.isValidName(name)) {
