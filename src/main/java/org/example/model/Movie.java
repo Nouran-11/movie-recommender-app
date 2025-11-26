@@ -2,6 +2,8 @@ package org.example.model;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Movie {
     private String title;
@@ -33,8 +35,6 @@ public class Movie {
     }
 
     public static String validateId(String id, String title) {
-        System.out.println("Validating movie ID: '" + id + "' with title: '" + title + "'");
-
         if (id == null || id.length() < 4) return "Error in movie id letters";
 
         StringBuilder capsInTitle = new StringBuilder();
