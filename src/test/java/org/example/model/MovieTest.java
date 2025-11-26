@@ -80,17 +80,17 @@ public class MovieTest {
     @Test
     public void testValidateId_invalidLetters() {
         String title = "Pride And Prejudice";
-        assertEquals("Error in movie id letters", Movie.validateId("SAP123", title), "Wrong prefix should fail");
-        assertEquals("Error in movie id letters", Movie.validateId("AP123", title), "Missing prefix should fail");
+        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("SAP123", title), "Wrong prefix should fail");
+        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("AP123", title), "Missing prefix should fail");
         assertEquals("Error in movie id letters", Movie.validateId(null, title), "Null ID should fail");
     }
 
     @Test
     public void testValidateId_invalidNumbers() {
         String title = "Pride And Prejudice";
-        assertEquals("Error in movie id unique numbers", Movie.validateId("PAP12", title), "Too short suffix should fail");
-        assertEquals("Error in movie id unique numbers", Movie.validateId("PAP112", title), "Repeated digits should fail");
-        assertEquals("Error in movie id unique numbers", Movie.validateId("PAP12A", title), "Non-digit suffix should fail");
-        assertEquals("Error in movie id unique numbers", Movie.validateId("PAP1234", title), "More than 3 digits suffix should fail");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12", title), "Too short suffix should fail");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP112", title), "Repeated digits should fail");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12A", title), "Non-digit suffix should fail");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP1234", title), "More than 3 digits suffix should fail");
     }
 }
