@@ -78,7 +78,14 @@ public class FileHandler {
                 if (!line2.isEmpty()) {
                     String[] likedIds = line2.split(",");
                     for (String mid : likedIds) {
-                        user.addLikedMovie(mid.trim());
+                        mid = mid.trim();
+
+                        //used for FileHandlerTest
+                        if (!Movie.isValidMovieId(mid,"TM")) {
+                            throw new Exception("ERROR: Movie Id " + mid + " is wrong");
+                        }
+
+                        user.addLikedMovie(mid);
                     }
                 }
                 users.add(user);

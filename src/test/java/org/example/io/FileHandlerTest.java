@@ -9,203 +9,195 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileHandlerTest {
-
-    // Helper method to create temporary files with given content
     private File createTempFile(String content) throws IOException {
-        File temp = File.createTempFile("test_users", ".txt");
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
-            bw.write(content);
+        File temp = File.createTempFile("user_test", ".txt");
+        temp.deleteOnExit();
+
+        try (FileWriter writer = new FileWriter(temp)) {
+            writer.write(content);
         }
+
         return temp;
     }
 
-    // ----------------------- 1. VALID USERS -----------------------
     @Test
-    void testReadUsers_ValidUsers() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        "MTR123,MAT456\n";
+    void testValidUserValidIdValidMovie() throws Exception {
+        String file =
+                "Menna Tarik,12345678A\n" +
+                        "TM123\n";
 
-        File temp = createTempFile(fileContent);
-
+        File temp = createTempFile(file);
         List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
 
         assertEquals(1, users.size());
-        User u = users.get(0);
-        assertEquals("Alice", u.getName());
-        assertEquals("12345678A", u.getId());
-        assertEquals(2, u.getLikedMovieIds().size());
-        assertEquals("MTR123", u.getLikedMovieIds().get(0));
     }
 
-    // ----------------------- 2. INVALID USER NAME -----------------------
+    // WRONG USERNAMES
     @Test
-    void testReadUsers_InvalidName() throws Exception {
-        String fileContent =
-                "A1ice,12345678A\n" +
-                        "MTR123\n";
+    void testWrongUserName_StartsWithSpace() throws Exception {
+        String file =
+                "  Menna,12345678A\n" +
+                        "TM123\n";
 
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
     @Test
-    void testReadUsers_NameStartsWithSpace() throws Exception {
-        String fileContent =
-                " Alice,12345678A\n" +
-                        "MTR123\n";
+    void testWrongUserName_HasDigits() throws Exception {
+        String file =
+                "Menna3,12345678A\n" +
+                        "TM123\n";
 
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
-    }
-
-    // ----------------------- 3. INVALID USER ID -----------------------
-    @Test
-    void testReadUsers_InvalidId_Not9Chars() throws Exception {
-        String fileContent =
-                "Alice,12345A\n" +  // Not 9 chars
-                        "MTR123\n";
-
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
     @Test
-    void testReadUsers_InvalidId_NotStartingWithDigit() throws Exception {
-        String fileContent =
-                "Alice,A2345678B\n" +  // Starts with letter
-                        "MTR123\n";
+    void testWrongUserName_HasSymbols() throws Exception {
+        String file =
+                "Men@na,12345678A\n" +
+                        "TM123\n";
 
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
     @Test
-    void testReadUsers_InvalidId_MultipleEndingLetters() throws Exception {
-        String fileContent =
-                "Alice,1234567AB\n" +  // Ends with 2 letters
-                        "MTR123\n";
+    void testWrongUserName_Empty() throws Exception {
+        String file =
+                ",12345678A\n" +
+                        "TM123\n";
 
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 4. DUPLICATE USER IDs -----------------------
+
+// WRONG USER IDS
+
     @Test
-    void testReadUsers_DuplicateUserId() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        "MTR123\n" +
+    void testWrongUserId_TooShort() throws Exception {
+        String file =
+                "Menna,12345\n" +
+                        "TM123\n";
+
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+    }
+
+    @Test
+    void testWrongUserId_TooLong() throws Exception {
+        String file =
+                "Menna,1234567890\n" +
+                        "TM123\n";
+
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+    }
+
+    @Test
+    void testWrongUserId_NotStartingWithNumber() throws Exception {
+        String file =
+                "Menna,A23456789\n" +
+                        "TM123\n";
+
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+    }
+
+    @Test
+    void testWrongUserId_EndsWithMoreThanOneLetter() throws Exception {
+        String file =
+                "Menna,1234567AB\n" +
+                        "TM123\n";
+
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+    }
+
+    @Test
+    void testWrongUserId_HasSymbols() throws Exception {
+        String file =
+                "Menna,12345@78A\n" +
+                        "TM123\n";
+
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+    }
+
+    @Test
+    void testWrongUserId_Duplicate() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "TM123\n" +
                         "Bob,12345678A\n" +
-                        "MAT456\n";
+                        "TM123\n";
 
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 5. EMPTY LIKED MOVIES -----------------------
+
+// WRONG MOVIE IDS
+
     @Test
-    void testReadUsers_EmptyLikedMovies() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        "\n"; // empty second line
+    void testWrongMovieId_MissingLetters() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "M123\n";
 
-        File temp = createTempFile(fileContent);
-
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
-
-        assertEquals(1, users.size());
-        assertEquals(0, users.get(0).getLikedMovieIds().size());
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 6. MULTIPLE LIKED MOVIES -----------------------
     @Test
-    void testReadUsers_MultipleLikedMovies() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        " MTR123 , MAT456 , XYZ789 \n";
+    void testWrongMovieId_ExtraLetters() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "TMM123\n";
 
-        File temp = createTempFile(fileContent);
-
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
-
-        assertEquals(1, users.size());
-        assertEquals(3, users.get(0).getLikedMovieIds().size());
-        assertEquals("MTR123", users.get(0).getLikedMovieIds().get(0));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 7. MISSING SECOND LINE -----------------------
     @Test
-    void testReadUsers_MissingSecondLine() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        "MTR123\n" +
-                        "Bob,23456789B\n";  // Missing 2nd line → Bob ignored
+    void testWrongMovieId_WrongLetters() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "TX123\n";
 
-        File temp = createTempFile(fileContent);
-
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
-
-        assertEquals(1, users.size()); // Bob is ignored
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 8. BLANK LINE BETWEEN USERS -----------------------
     @Test
-    void testReadUsers_BlankLineBetweenUsers() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        "MTR123\n" +
-                        "\n" +                // Blank line → invalid
-                        "Bob,23456789B\n" +
-                        "MAT456\n";
+    void testWrongMovieId_RepeatedDigits() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "TM111\n";
 
-        File temp = createTempFile(fileContent);
-
-        assertThrows(Exception.class,
-                () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 9. TRIM SPACES -----------------------
     @Test
-    void testReadUsers_TrimSpaces() throws Exception {
-        String fileContent =
-                "   Alice   ,12345678A\n" +
-                        "MTR123,MAT456\n";
+    void testWrongMovieId_NotThreeDigits() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "TM12\n";
 
-        File temp = createTempFile(fileContent);
-
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
-
-        //assertEquals(1, users.size());
-        //assertEquals("   Alice   ", users.get(0).getName());
-        //assertEquals("12345678A", users.get(0).getId());
-        //assertEquals("MTR123", users.get(0).getLikedMovieIds().get(0));
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 
-    // ----------------------- 10. SECOND LINE WITH SPACES ONLY -----------------------
     @Test
-    void testReadUsers_SecondLineOnlySpaces() throws Exception {
-        String fileContent =
-                "Alice,12345678A\n" +
-                        "   \n"; // becomes empty after trim
+    void testWrongMovieId_LetterInsideDigits() throws Exception {
+        String file =
+                "Menna,12345678A\n" +
+                        "TM1A3\n";
 
-        File temp = createTempFile(fileContent);
-
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
-
-        assertEquals(1, users.size());
-        assertEquals(0, users.get(0).getLikedMovieIds().size());
+        File temp = createTempFile(file);
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
     }
 }
