@@ -125,8 +125,8 @@ void testNoUsersAndNoMoviesExist() throws IOException {
 
     List<String> lines = Files.readAllLines(outputPath);
 
-    assertTrue(lines.isEmpty(), "Output file should be empty when there are no users");}
-
+    assertTrue(lines.isEmpty(), "Output file should be empty when there are no users");
+    }
    
     
 }
