@@ -34,7 +34,7 @@ public class RecommendationTest {
         String aliceRecommendations = lines.get(1);
         assertTrue(aliceRecommendations.contains("Interstellar"));
         assertFalse(aliceRecommendations.contains("Inception"), "Should not recommend already liked movie");
-         assertFalse(aliceRecommendations.contains("Iron Man"),"Should not recommend movies from unrelated genres");
+        assertFalse(aliceRecommendations.contains("Iron Man"),"Should not recommend movies from unrelated genres");
             }   
 
 
