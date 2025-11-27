@@ -92,7 +92,6 @@ public class RecommendationTest {
         String aliceRecommendations = lines.get(1);
         assertEquals("", aliceRecommendations, "Should not recommend any movies as user likes all");
             }
-
         @Test
         void testMoviesExistButNoUsers() throws IOException {
     Movie ironMan = new Movie("Iron Man", "IM123", "Action");
