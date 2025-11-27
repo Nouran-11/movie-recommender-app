@@ -58,12 +58,12 @@ public class RecommendationTest {
        List<String> lines= Files.readAllLines(outputPath);
 
        //start checking the test case
-        assertEquals("Alice, 12345678A", lines.get(0));
-        String aliceRecommendations = lines.get(1);
-        assertTrue(aliceRecommendations.contains("Interstellar"));
-        assertFalse(aliceRecommendations.contains("Inception"), "Should not recommend already liked movie");
-        assertFalse(aliceRecommendations.contains("Iron Man"),"Should not recommend movies from unrelated genres");
-            } 
+       assertEquals("Alice, 12345678A", lines.get(0));
+       String aliceRecommendations = lines.get(1);
+       assertTrue(aliceRecommendations.contains("Interstellar"));
+       assertFalse(aliceRecommendations.contains("Inception"), "Should not recommend already liked movie");
+       assertFalse(aliceRecommendations.contains("Iron Man"),"Should not recommend movies from unrelated genres");
+   }
             
 
          @Test   //user that likes every movie
