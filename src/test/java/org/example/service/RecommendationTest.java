@@ -26,7 +26,7 @@ public class RecommendationTest {
        alice.addLikedMovie("I123");
        Recommendation recommendation= new Recommendation();
        Path outputPath= Files.createTempFile("recommendations", ".txt");
-         recommendation.generateRecommendations(userList, movieList, outputPath.toString());
+       recommendation.generateRecommendations(userList, movieList, outputPath.toString());
        List<String> lines= Files.readAllLines(outputPath);
 
        //start checking the test case
