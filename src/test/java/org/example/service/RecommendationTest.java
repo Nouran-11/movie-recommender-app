@@ -66,7 +66,7 @@ public class RecommendationTest {
    }
             
 
-         @Test   //user that likes every movie
+@Test   //user that likes every movie
         void testNoRecommendationsWhenUserLikedAllMovies() throws IOException {
        Movie littleWomen= new Movie("Little Women","LM123","Romance, Drama");
        Movie goodWillHunting= new Movie("Good Will Hunting","GWH913","Drama");
