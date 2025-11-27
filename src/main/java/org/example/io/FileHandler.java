@@ -95,4 +95,66 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+    public static void writeRecommendations(
+            List<User> users,
+            List<Movie> movies,
+            List<String> errors,
+            String outputPath ) {
+
+        outputPath = "recommendations.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
+
+            if (!errors.isEmpty()) {
+                writer.write(errors.get(0));  // ONLY first error
+                return;                      // STOP processing
+            }
+
+            Map<String, Movie> movieMap = new HashMap<>();
+            for (Movie m : movies) {
+                movieMap.put(m.getId(), m);
+            }
+
+            for (User user : users) {
+
+                // First line: user's name and id
+                writer.write(user.getName() + "," + user.getId());
+                writer.newLine();
+
+                List<String> likedIds = user.getLikedMovieIds();
+
+                // Collect genres the user likes
+                Set<String> likedGenres = new HashSet<>();
+                for (String movieId : likedIds) {
+                    Movie movie = movieMap.get(movieId);
+                    if (movie != null) {
+                        likedGenres.add(movie.getGenre());
+                    }
+                }
+
+                // Recommend movies from same genres
+                Set<String> recommendedTitles = new LinkedHashSet<>();
+                for (Movie movie : movies) {
+                    if (!likedIds.contains(movie.getId()) &&
+                            likedGenres.contains(movie.getGenre())) {
+
+                        recommendedTitles.add(movie.getTitle());
+                    }
+                }
+
+                // Write recommendations line
+                if (recommendedTitles.isEmpty()) {
+                    writer.write(""); // empty line, no recommendations
+                } else {
+                    writer.write(String.join(",", recommendedTitles));
+                }
+
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
