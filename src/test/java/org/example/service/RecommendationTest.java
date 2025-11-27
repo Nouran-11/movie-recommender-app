@@ -76,14 +76,14 @@ public class RecommendationTest {
        User bob= new User("Bob","87654321B");
        User charlie= new User("Charlie","56781234C");
        List<User> userList= List.of(alice, bob, charlie);
-         alice.addLikedMovie("LM123");
-         alice.addLikedMovie("GWH913");
-         alice.addLikedMovie("I789");
-         bob.addLikedMovie("LM123");
-         charlie.addLikedMovie("GWH913");
+       alice.addLikedMovie("LM123");
+       alice.addLikedMovie("GWH913");
+       alice.addLikedMovie("I789");
+       bob.addLikedMovie("LM123");
+       charlie.addLikedMovie("GWH913");
        Recommendation recommendation= new Recommendation();
        Path outputPath= Files.createTempFile("recommendations", ".txt");
-         recommendation.generateRecommendations(userList, movieList, outputPath.toString());
+       recommendation.generateRecommendations(userList, movieList, outputPath.toString());
        List<String> lines= Files.readAllLines(outputPath);
 
        //start checking the test case
