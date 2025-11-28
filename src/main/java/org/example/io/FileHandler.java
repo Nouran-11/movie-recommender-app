@@ -69,6 +69,7 @@ public class FileHandler {
 
                 String[] parts = line1.split(",");
                 String name = parts[0];
+                String nametrimmed = name.trim();
                 String id = parts[1].trim();
 
                 if (!User.isValidName(name)) {
@@ -85,7 +86,7 @@ public class FileHandler {
                 }
                 existingIds.add(id);
 
-                User user = new User(name, id);
+                User user = new User(nametrimmed, id);
 
                 if (!line2.isEmpty()) {
                     String[] likedIds = line2.split(",");
@@ -93,7 +94,7 @@ public class FileHandler {
                         String midtrimmed = mid.trim();
 
 
-                        // 1) Check if this movie exists
+                        //  Check if this movie exists
                         Movie found = movies.stream()
                                 .filter(m -> m.getId().equals(midtrimmed))
                                 .findFirst()
@@ -103,7 +104,7 @@ public class FileHandler {
                             throw new Exception("ERROR: Movie Id " + midtrimmed + " does not exist");
                         }
 
-                        // 2) Validate ID using the title of the found movie
+                        //  Validate ID using the title of the found movie
                         if (!Movie.isValidMovieId(mid, found.getTitle())) {
                             throw new Exception("ERROR: Movie Id " + midtrimmed + " is wrong");
                         }
