@@ -22,6 +22,11 @@ public class User {
     public String getId() { return id; }
     public List<String> getLikedMovieIds() { return likedMovieIds; }
 
+    public static boolean isValidMovieId(String movieId){
+        if(movieId ==null || movieId.isEmpty()) return false;
+        else return true;
+    }
+
 
     public static boolean isValidName(String name) {
         if (name == null || name.isEmpty()) return false;

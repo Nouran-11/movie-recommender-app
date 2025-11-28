@@ -46,13 +46,13 @@ public class Movie {
         String expectedPrefix = capsInTitle.toString();
 
         if (!id.startsWith(expectedPrefix)) {
-            return "Error in movie id letters";
+            return  "Movie Id letters {movie_id} are wrong";
         }
 
         String suffix = id.substring(expectedPrefix.length());
 
         if (suffix.length() != 3 || !suffix.matches("\\d{3}")) {
-            return "Error in movie id unique numbers";
+            return "Movie Id numbers {movie_id} aren't unique";
         }
 
         Set<Character> uniqueDigits = new HashSet<>();
@@ -60,7 +60,7 @@ public class Movie {
             uniqueDigits.add(c);
         }
         if (uniqueDigits.size() < 3) {
-            return "Error in movie id unique numbers";
+            return "Movie Id numbers {movie_id} aren't unique";
         }
 
         return "Valid";
