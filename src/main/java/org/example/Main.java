@@ -16,7 +16,7 @@ public class Main {
         try {
 
             List<Movie> movies = FileHandler.readMovies(movieFile);
-            List<User> users = FileHandler.readUsers(userFile);
+            List<User> users = FileHandler.readUsers(userFile, movies);
 
             Recommendation engine = new Recommendation();
             engine.generateRecommendations(users, movies, outputFile);

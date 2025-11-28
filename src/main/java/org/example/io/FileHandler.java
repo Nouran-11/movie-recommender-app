@@ -57,7 +57,7 @@ public class FileHandler {
         return movies;
     }
 
-    public static List<User> readUsers(String filePath) throws Exception {
+    public static List<User> readUsers(String filePath, List<Movie> movies) throws Exception {
         List<User> users = new ArrayList<>();
         Set<String> existingIds = new HashSet<>();
 
@@ -90,13 +90,25 @@ public class FileHandler {
                 if (!line2.isEmpty()) {
                     String[] likedIds = line2.split(",");
                     for (String mid : likedIds) {
-                        mid = mid.trim();
-                        user.addLikedMovie(mid);
-                        //used for FileHandlerTest
-                        //if (!Movie.isValidMovieId(mid,"TM")) {
-                            //throw new Exception("ERROR: Movie Id " + mid + " is wrong");
-                        //}
+                        String midtrimmed = mid.trim();
 
+
+                        // 1) Check if this movie exists
+                        Movie found = movies.stream()
+                                .filter(m -> m.getId().equals(midtrimmed))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (found == null) {
+                            throw new Exception("ERROR: Movie Id " + midtrimmed + " does not exist");
+                        }
+
+                        // 2) Validate ID using the title of the found movie
+                        if (!Movie.isValidMovieId(mid, found.getTitle())) {
+                            throw new Exception("ERROR: Movie Id " + midtrimmed + " is wrong");
+                        }
+
+                        user.addLikedMovie(midtrimmed);
 
                     }
                 }

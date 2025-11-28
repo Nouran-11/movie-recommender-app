@@ -27,12 +27,15 @@ public class FileHandlerTest {
 
     @Test
     void testValidUserValidIdValidMovie() throws Exception {
+
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna Tarik,12345678A\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath());
+        List<User> users = FileHandler.readUsers(temp.getAbsolutePath(), movies);
 
         assertEquals(1, users.size());
     }
@@ -40,99 +43,120 @@ public class FileHandlerTest {
     // WRONG USERNAMES
     @Test
     void testWrongUserName_StartsWithSpace() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "  Menna,12345678A\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
     }
 
     @Test
     void testWrongUserName_HasDigits() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna3,12345678A\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
     }
 
     @Test
     void testWrongUserName_HasSymbols() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Men@na,12345678A\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
     }
 
     @Test
     void testWrongUserName_Empty() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 ",12345678A\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
     }
+
 
 
 // WRONG USER IDS
 
     @Test
     void testWrongUserId_TooShort() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongUserId_TooLong() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,1234567890\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongUserId_NotStartingWithNumber() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,A23456789\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongUserId_EndsWithMoreThanOneLetter() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,1234567AB\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongUserId_HasSymbols() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345@78A\n" +
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongUserId_Duplicate() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "TM123\n" +
@@ -140,7 +164,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
 
@@ -148,62 +172,74 @@ public class FileHandlerTest {
 
     @Test
     void testWrongMovieId_MissingLetters() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "M123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongMovieId_ExtraLetters() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "TMM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongMovieId_WrongLetters() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "TX123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongMovieId_RepeatedDigits() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "TM111\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongMovieId_NotThreeDigits() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "TM12\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
     void testWrongMovieId_LetterInsideDigits() throws Exception {
+        Movie matrix = new Movie("The Matrix", "TM123", "Action");
+        List<Movie> movies = List.of(matrix);
         String file =
                 "Menna,12345678A\n" +
                         "TM1A3\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath()));
+        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
     }
 
    
