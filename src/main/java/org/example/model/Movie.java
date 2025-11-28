@@ -65,4 +65,8 @@ public class Movie {
 
         return "Valid";
     }
+    //Handles the true/False isValidMovieID "BOOLEAN wrapper"
+    public static boolean isValidMovieId(String id, String title) {
+        return validateId(id, title).equals("Valid");
+    }
 }
