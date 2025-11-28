@@ -45,11 +45,16 @@ public class Movie {
         }
         String expectedPrefix = capsInTitle.toString();
 
+
         if (!id.startsWith(expectedPrefix)) {
             return  "Movie Id letters {movie_id} are wrong";
         }
 
         String suffix = id.substring(expectedPrefix.length());
+        
+        if (suffix.length() > 3 && !suffix.substring(0, suffix.length() - 3).matches("\\d*")) {
+            return "Movie Id letters {movie_id} are wrong";
+        }
 
         if (suffix.length() != 3 || !suffix.matches("\\d{3}")) {
             return "Movie Id numbers {movie_id} aren't unique";
@@ -69,4 +74,5 @@ public class Movie {
     public static boolean isValidMovieId(String id, String title) {
         return validateId(id, title).equals("Valid");
     }
+}
 }
