@@ -67,7 +67,7 @@ public class MovieTest {
         assertFalse(Movie.isValidTitle("pride And Prejudice"), "Title starting with lowercase should be invalid");
         assertFalse(Movie.isValidTitle(""), "Empty title should be invalid");
         assertFalse(Movie.isValidTitle(null), "Null title should be invalid");
-        assertFalse(Movie.isValidTitle("pride  And Prejudice"), "Title with extra space should be invalid");
+        assertFalse(Movie.isValidTitle("-Pride And Prejudice"), "Title starting with a special character should be invalid");
     }
 
     @Test
