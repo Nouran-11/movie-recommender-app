@@ -35,7 +35,7 @@ public class Movie {
     }
 
     public static String validateId(String id, String title) {
-        if (id == null || id.length() < 4) return "Error in movie id letters";
+        if (id == null || id.length() < 4) return "Movie Id letters {movie_id} are wrong";
 
         StringBuilder capsInTitle = new StringBuilder();
         for (char c : title.toCharArray()) {
