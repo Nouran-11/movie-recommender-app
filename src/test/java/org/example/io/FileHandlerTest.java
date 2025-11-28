@@ -11,16 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
  
 public class FileHandlerTest {
-  
-    private Path tempFile;
-    
-    @AfterEach
-    void cleanup() throws IOException {
-        if (tempFile != null) {
-            Files.deleteIfExists(tempFile);
+
+    private File createTempFile(String content) throws IOException {
+        File temp = File.createTempFile("user_test", ".txt");
+        temp.deleteOnExit();
+
+        try (FileWriter writer = new FileWriter(temp)) {
+            writer.write(content);
         }
-    } 
- 
+
+        return temp;
+    }
 
       // ------------------------- TEST readUers() -------------------------
 
@@ -207,6 +208,15 @@ public class FileHandlerTest {
 
    
     // ------------------------- TEST readMovies() -------------------------
+
+    private Path tempFile;
+
+    @AfterEach
+    void cleanup() throws IOException {
+        if (tempFile != null) {
+            Files.deleteIfExists(tempFile);
+        }
+    }
 
     @Test
     void testReadMovies_Success() throws Exception {
