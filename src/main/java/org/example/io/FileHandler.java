@@ -10,6 +10,14 @@ public class FileHandler {
 
     public static List<Movie> readMovies(String filePath) throws Exception {
         List<Movie> movies = new ArrayList<>();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new Exception("ERROR: Movie Title  is wrong");
+        }
+
+        if (file.length() == 0) {
+            throw new Exception("ERROR: Movie Title  is wrong");
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line1;
@@ -42,6 +50,9 @@ public class FileHandler {
 
                 movies.add(new Movie(title, id, genre));
             }
+        }
+        if (movies.isEmpty()) {
+            throw new Exception("ERROR: Movie Title  is wrong");
         }
         return movies;
     }

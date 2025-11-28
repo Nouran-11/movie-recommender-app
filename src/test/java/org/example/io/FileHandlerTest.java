@@ -312,25 +312,27 @@ public class FileHandlerTest {
         assertEquals("ERROR: Movie Title 123WrongTitle is wrong", ex.getMessage());
     }
     @Test
-    void testReadMovies_EmptyFile_ReturnsEmptyList() throws Exception {
-        tempFile = Files.createTempFile("movies", ".txt");
-        Files.write(tempFile, new byte[0]);
+    void testReadMovies_EmptyFile_ThrowsException() throws IOException {
+        java.nio.file.Path tempPath = java.nio.file.Files.createTempFile("movies", ".txt");
 
-        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
+        Exception exception = assertThrows(Exception.class, () -> {
+            FileHandler.readMovies(tempPath.toString());
+        });
 
-        assertTrue(movies.isEmpty());
+        assertEquals("ERROR: Movie Title  is wrong", exception.getMessage());
+        java.nio.file.Files.deleteIfExists(tempPath);
     }
     @Test
-    void testReadMovies_OnlyOneLine_NoGenre_ReturnsEmptyList() throws Exception {
-        tempFile = Files.createTempFile("movies", ".txt");
+    void testReadMovies_OnlyOneLine_NoGenre_ThrowsException() throws IOException {
+        java.nio.file.Path tempPath = java.nio.file.Files.createTempFile("movies", ".txt");
+        String data = "The Matrix, TM263\n"; // No second line
+        java.nio.file.Files.write(tempPath, data.getBytes());
 
-        String data = "The Matrix, TM263\n";  // No second line
-
-        Files.write(tempFile, data.getBytes());
-
-        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
-
-        assertEquals(0, movies.size());
+        Exception exception = assertThrows(Exception.class, () -> {
+            FileHandler.readMovies(tempPath.toString());
+        });
+        assertEquals("ERROR: Movie Title  is wrong", exception.getMessage());
+        java.nio.file.Files.deleteIfExists(tempPath);
     }
     @Test
     void testReadMovies_InvalidIdNumbers_ThrowsException() throws Exception {
