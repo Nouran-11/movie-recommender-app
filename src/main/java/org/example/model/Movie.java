@@ -51,7 +51,7 @@ public class Movie {
         }
 
         String suffix = id.substring(expectedPrefix.length());
-        
+
         if (suffix.length() > 3 && !suffix.substring(0, suffix.length() - 3).matches("\\d*")) {
             return "Movie Id letters {movie_id} are wrong";
         }
@@ -74,5 +74,4 @@ public class Movie {
     public static boolean isValidMovieId(String id, String title) {
         return validateId(id, title).equals("Valid");
     }
-}
 }
