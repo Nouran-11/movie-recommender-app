@@ -1,0 +1,12 @@
+The Matrix,TM123
+Action,Sci-Fi
+Inception,I456
+Action,Thriller
+Parasite,P789
+Drama,Fun
+The Nun,TN345
+Horror,Action
+Any Thing,AT678
+Family,Fun
+Coco,C321
+Animation,Family

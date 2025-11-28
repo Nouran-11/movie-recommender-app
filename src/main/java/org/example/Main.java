@@ -28,7 +28,7 @@ public class Main {
 
             String errorMsg = e.getMessage();
 
-            if (errorMsg != null && errorMsg.startsWith("ERROR:")) {
+            if (errorMsg != null) {
                 FileHandler.writeError(outputFile, errorMsg);
                 System.err.println("Validation Failed. detailed error written to " + outputFile);
             } else {

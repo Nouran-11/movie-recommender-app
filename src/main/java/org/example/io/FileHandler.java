@@ -1,7 +1,5 @@
 package org.example.io;
 
-
-
 import org.example.model.Movie;
 import org.example.model.User;
 
@@ -12,6 +10,14 @@ public class FileHandler {
 
     public static List<Movie> readMovies(String filePath) throws Exception {
         List<Movie> movies = new ArrayList<>();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new Exception("ERROR: Movie Title  is wrong");
+        }
+
+        if (file.length() == 0) {
+            throw new Exception("ERROR: Movie Title  is wrong");
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line1;
@@ -30,7 +36,10 @@ public class FileHandler {
 
 
                 if (!Movie.isValidTitle(title)) {
-                    throw new Exception("ERROR: Movie Title " + title + " is wrong");
+                    throw new Exception(
+                            "ERROR: Movie Title {movie_title} is wrong".replace("{movie_title}", title)
+                    );
+
                 }
 
                 String idValidation = Movie.validateId(id, title);
@@ -41,6 +50,9 @@ public class FileHandler {
 
                 movies.add(new Movie(title, id, genre));
             }
+        }
+        if (movies.isEmpty()) {
+            throw new Exception("ERROR: Movie Title  is wrong");
         }
         return movies;
     }
@@ -56,7 +68,7 @@ public class FileHandler {
                 if (line2 == null) break;
 
                 String[] parts = line1.split(",");
-                String name = parts[0].trim();
+                String name = parts[0];
                 String id = parts[1].trim();
 
                 if (!User.isValidName(name)) {
@@ -78,7 +90,14 @@ public class FileHandler {
                 if (!line2.isEmpty()) {
                     String[] likedIds = line2.split(",");
                     for (String mid : likedIds) {
-                        user.addLikedMovie(mid.trim());
+                        mid = mid.trim();
+                        user.addLikedMovie(mid);
+                        //used for FileHandlerTest
+                        //if (!Movie.isValidMovieId(mid,"TM")) {
+                            //throw new Exception("ERROR: Movie Id " + mid + " is wrong");
+                        //}
+
+
                     }
                 }
                 users.add(user);
@@ -89,7 +108,6 @@ public class FileHandler {
 
     public static void writeError(String filePath, String errorMessage) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            bw.write("Error\n");
             bw.write(errorMessage);
         } catch (IOException e) {
             e.printStackTrace();
