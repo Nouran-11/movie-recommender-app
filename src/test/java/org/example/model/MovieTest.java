@@ -82,7 +82,7 @@ public class MovieTest {
         String title = "Pride And Prejudice";
         assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("SAP123", title), "Wrong prefix should fail");
         assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("AP123", title), "Missing prefix should fail");
-        assertEquals("Error in movie id letters", Movie.validateId(null, title), "Null ID should fail");
+        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId(null, title), "Null ID should fail");
     }
 
     @Test
