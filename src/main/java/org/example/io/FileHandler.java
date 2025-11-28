@@ -91,13 +91,13 @@ public class FileHandler {
                     String[] likedIds = line2.split(",");
                     for (String mid : likedIds) {
                         mid = mid.trim();
-
-                        //used for FileHandlerTest
-                        if (!Movie.isValidMovieId(mid,"TM")) {
-                            throw new Exception("ERROR: Movie Id " + mid + " is wrong");
-                        }
-
                         user.addLikedMovie(mid);
+                        //used for FileHandlerTest
+                        //if (!Movie.isValidMovieId(mid,"TM")) {
+                            //throw new Exception("ERROR: Movie Id " + mid + " is wrong");
+                        //}
+
+
                     }
                 }
                 users.add(user);
@@ -108,7 +108,6 @@ public class FileHandler {
 
     public static void writeError(String filePath, String errorMessage) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            bw.write("Error\n");
             bw.write(errorMessage);
         } catch (IOException e) {
             e.printStackTrace();

@@ -23,7 +23,7 @@ public class FileHandlerTest {
         return temp;
     }
 
-      // ------------------------- TEST readUers() -------------------------
+      // ------------------------- TEST readUsers() -------------------------
 
     @Test
     void testValidUserValidIdValidMovie() throws Exception {
