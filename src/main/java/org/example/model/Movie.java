@@ -51,6 +51,10 @@ public class Movie {
 
         String suffix = id.substring(expectedPrefix.length());
 
+        if (suffix.length() > 3 && !suffix.substring(0, suffix.length() - 3).matches("\\d*")) {
+            return "Movie Id letters {movie_id} are wrong";
+        }
+
         if (suffix.length() != 3 || !suffix.matches("\\d{3}")) {
             return "Error in movie id unique numbers";
         }
