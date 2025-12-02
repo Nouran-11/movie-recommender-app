@@ -2,12 +2,14 @@ package org.example.io;
 
 import org.example.model.Movie;
 import org.example.model.User;
+import org.example.model.UserValidator;
 
 import java.io.*;
 import java.util.*;
 
 public class FileHandler {
 
+    // =================== Read Movies ==================== //
     public static List<Movie> readMovies(String filePath) throws Exception {
         List<Movie> movies = new ArrayList<>();
         File file = new File(filePath);
@@ -34,7 +36,6 @@ public class FileHandler {
                 String genre = line2.trim();
 
 
-
                 if (!Movie.isValidTitle(title)) {
                     throw new Exception(
                             "ERROR: Movie Title {movie_title} is wrong".replace("{movie_title}", title)
@@ -57,11 +58,19 @@ public class FileHandler {
         return movies;
     }
 
+    // ==================== READ USERS ======================= //
     public static List<User> readUsers(String filePath, List<Movie> movies) throws Exception {
+
+        File file = new File(filePath);
+        if (!file.exists() || file.length() == 0) {
+            throw new Exception("ERROR: User file is missing or empty.");
+        }
+
         List<User> users = new ArrayList<>();
         Set<String> existingIds = new HashSet<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+
             String line1;
             while ((line1 = br.readLine()) != null) {
                 String line2 = br.readLine();
@@ -72,11 +81,12 @@ public class FileHandler {
                 String nametrimmed = name.trim();
                 String id = parts[1].trim();
 
-                if (!User.isValidName(name)) {
+                // Validate User name & ID
+                if (!UserValidator.isValidName(name)) {
                     throw new Exception("ERROR: User Name " + name + " is wrong");
                 }
 
-                if (!User.isValidUserId(id)) {
+                if (!UserValidator.isValidUserId(id)) {
                     throw new Exception("ERROR: User Id " + id + " is wrong");
                 }
 

@@ -8,13 +8,12 @@ import org.example.service.Recommendation;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        String movieFile = "movies.txt";
-        String userFile = "users.txt";
+
+    // ================ Load and Validate ================== //
+    public static void load_and_validate(String movieFile, String userFile){
         String outputFile = "recommendations.txt";
 
         try {
-
             List<Movie> movies = FileHandler.readMovies(movieFile);
             List<User> users = FileHandler.readUsers(userFile, movies);
 
@@ -36,4 +35,11 @@ public class Main {
             }
         }
     }
-}
+
+    // =========== Main where user inputs the files =============== //
+    public static void main(String[] args) {
+
+        load_and_validate("movies.txt", "users.txt");
+    }
+    }
+
