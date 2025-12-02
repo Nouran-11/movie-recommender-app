@@ -24,7 +24,7 @@ public class UserTest {
     // MovieId validation Tests
     // -----------------------------
     void testMovieId(){
-        assertFalse(User.isValidMovieId(" "));
+        assertFalse(UserValidator.isValidMovieId(" "));
     }
 
     // -----------------------------
@@ -32,17 +32,17 @@ public class UserTest {
     // -----------------------------
     @Test
     void testValidName() {
-        assertTrue(User.isValidName("Menna"));
-        assertTrue(User.isValidName("John Doe"));
+        assertTrue(UserValidator.isValidName("Menna"));
+        assertTrue(UserValidator.isValidName("John Doe"));
     }
 
     @Test
     void testInvalidName() {
-        assertFalse(User.isValidName(null));
-        assertFalse(User.isValidName(""));
-        assertFalse(User.isValidName("  Menna"));
-        assertFalse(User.isValidName("123Menna"));
-        assertFalse(User.isValidName("Menna!"));
+        assertFalse(UserValidator.isValidName(null));
+        assertFalse(UserValidator.isValidName(""));
+        assertFalse(UserValidator.isValidName("  Menna"));
+        assertFalse(UserValidator.isValidName("123Menna"));
+        assertFalse(UserValidator.isValidName("Menna!"));
     }
 
     // -----------------------------
@@ -50,32 +50,32 @@ public class UserTest {
     // -----------------------------
     @Test
     void testValidUserId() {
-        assertTrue(User.isValidUserId("1A2B3C4D5"));  // ends with digit
-        assertTrue(User.isValidUserId("1A2B3C4D6"));  // ends with digit
-        assertTrue(User.isValidUserId("1A2B3C43E"));  // ends with letter, 7th is not letter
+        assertTrue(UserValidator.isValidUserId("1A2B3C4D5"));  // ends with digit
+        assertTrue(UserValidator.isValidUserId("1A2B3C4D6"));  // ends with digit
+        assertTrue(UserValidator.isValidUserId("1A2B3C43E"));  // ends with letter, 7th is not letter
     }
 
     @Test
     void testInvalidUserId_NullOrWrongLength() {
-        assertFalse(User.isValidUserId(null));
-        assertFalse(User.isValidUserId("12345"));       // too short
-        assertFalse(User.isValidUserId("12345678910")); // too long
+        assertFalse(UserValidator.isValidUserId(null));
+        assertFalse(UserValidator.isValidUserId("12345"));       // too short
+        assertFalse(UserValidator.isValidUserId("12345678910")); // too long
     }
 
     @Test
     void testInvalidUserId_NotAlphanumeric() {
-        assertFalse(User.isValidUserId("1A$B3C4D5"));
-        assertFalse(User.isValidUserId("1A2B3C4D!"));
+        assertFalse(UserValidator.isValidUserId("1A$B3C4D5"));
+        assertFalse(UserValidator.isValidUserId("1A2B3C4D!"));
     }
 
     @Test
     void testInvalidUserId_DoesNotStartWithDigit() {
-        assertFalse(User.isValidUserId("A12345678"));
+        assertFalse(UserValidator.isValidUserId("A12345678"));
     }
 
     @Test
     void testInvalidUserId_LastTwoCharsBothLetters() {
-        assertFalse(User.isValidUserId("1A2B3CDDE"));  // last two letters → invalid
-        assertFalse(User.isValidUserId("1A2B323CE"));  // last two letters → invalid
+        assertFalse(UserValidator.isValidUserId("1A2B3CDDE"));  // last two letters → invalid
+        assertFalse(UserValidator.isValidUserId("1A2B323CE"));  // last two letters → invalid
     }
 }
