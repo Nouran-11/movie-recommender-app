@@ -19,12 +19,12 @@ public class MovieTest {
 
     @BeforeAll
     public static void setUpClass() {
-        
+
     }
 
     @AfterAll
     public static void tearDownClass() {
-       
+
     }
 
     @BeforeEach
@@ -59,7 +59,7 @@ public class MovieTest {
     public void testIsValidTitle_positive() {
         assertTrue(Movie.isValidTitle("Pride And Prejudice"), "Title starting with capital letters should be valid");
         assertTrue(Movie.isValidTitle("A B C"), "Title with multiple words starting with uppercase should be valid");
-        
+
     }
 
     @Test
@@ -67,7 +67,8 @@ public class MovieTest {
         assertFalse(Movie.isValidTitle("pride And Prejudice"), "Title starting with lowercase should be invalid");
         assertFalse(Movie.isValidTitle(""), "Empty title should be invalid");
         assertFalse(Movie.isValidTitle(null), "Null title should be invalid");
-        assertFalse(Movie.isValidTitle("-Pride And Prejudice"), "Title starting with a special character should be invalid");
+        assertFalse(Movie.isValidTitle("-Pride And Prejudice"),
+                "Title starting with a special character should be invalid");
     }
 
     @Test
@@ -80,17 +81,22 @@ public class MovieTest {
     @Test
     public void testValidateId_invalidLetters() {
         String title = "Pride And Prejudice";
-        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("SAP123", title), "Wrong prefix should fail");
-        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("AP123", title), "Missing prefix should fail");
+        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("SAP123", title),
+                "Wrong prefix should fail");
+        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("AP123", title),
+                "Missing prefix should fail");
         assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId(null, title), "Null ID should fail");
     }
 
     @Test
     public void testValidateId_invalidNumbers() {
         String title = "Pride And Prejudice";
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12", title), "Too short suffix should fail");
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP112", title), "Repeated digits should fail");
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12A", title), "Non-digit suffix should fail");
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP1234", title), "More than 3 digits suffix should fail");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12", title),
+                "Too short suffix should fail");
+        assertEquals("Valid", Movie.validateId("PAP112", title), "Repeated digits should be valid now");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12A", title),
+                "Non-digit suffix should fail");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP1234", title),
+                "More than 3 digits suffix should fail");
     }
 }

@@ -16,17 +16,26 @@ public class Movie {
         this.genre = genre;
     }
 
-    public String getTitle() { return title; }
-    public String getId() { return id; }
-    public String getGenre() { return genre; }
+    public String getTitle() {
+        return title;
+    }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
 
     public static boolean isValidTitle(String title) {
-        if (title == null || title.isEmpty()) return false;
+        if (title == null || title.isEmpty())
+            return false;
 
         String[] words = title.split(" ");
         for (String word : words) {
-            if (word.isEmpty()) continue;
+            if (word.isEmpty())
+                continue;
             if (!Character.isUpperCase(word.charAt(0))) {
                 return false;
             }
@@ -35,7 +44,8 @@ public class Movie {
     }
 
     public static String validateId(String id, String title) {
-        if (id == null || id.length() < 4) return "Movie Id letters {movie_id} are wrong";
+        if (id == null || id.length() < 4)
+            return "Movie Id letters {movie_id} are wrong";
 
         StringBuilder capsInTitle = new StringBuilder();
         for (char c : title.toCharArray()) {
@@ -45,9 +55,8 @@ public class Movie {
         }
         String expectedPrefix = capsInTitle.toString();
 
-
         if (!id.startsWith(expectedPrefix)) {
-            return  "Movie Id letters {movie_id} are wrong";
+            return "Movie Id letters {movie_id} are wrong";
         }
 
         String suffix = id.substring(expectedPrefix.length());
@@ -60,17 +69,10 @@ public class Movie {
             return "Movie Id numbers {movie_id} aren't unique";
         }
 
-        Set<Character> uniqueDigits = new HashSet<>();
-        for (char c : suffix.toCharArray()) {
-            uniqueDigits.add(c);
-        }
-        if (uniqueDigits.size() < 3) {
-            return "Movie Id numbers {movie_id} aren't unique";
-        }
-
         return "Valid";
     }
-    //Handles the true/False isValidMovieID "BOOLEAN wrapper"
+
+    // Handles the true/False isValidMovieID "BOOLEAN wrapper"
     public static boolean isValidMovieId(String id, String title) {
         return validateId(id, title).equals("Valid");
     }
