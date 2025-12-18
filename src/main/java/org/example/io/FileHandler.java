@@ -37,16 +37,14 @@ public class FileHandler {
                 String id = parts[1].trim();
                 String genre = line2.trim();
 
-                if (!MovieValidator.isValidTitle(title)) {
-                    throw new Exception(
-                            "ERROR: Movie Title {movie_title} is wrong".replace("{movie_title}", title));
-
+                String titleValidation = MovieValidator.validateTitle(title);
+                if (!titleValidation.equals("Valid")) {
+                    throw new Exception(titleValidation);
                 }
 
                 String idValidation = MovieValidator.validateId(id, title);
                 if (!idValidation.equals("Valid")) {
-
-                    throw new Exception("ERROR: " + idValidation.replace("{movie_id}", id));
+                    throw new Exception(idValidation);
                 }
 
                 movies.add(new Movie(title, id, genre));
@@ -74,16 +72,17 @@ public class FileHandler {
                 String nametrimmed = name.trim();
                 String id = parts[1].trim();
 
-                if (!UserValidator.isValidName(name)) {
-                    throw new Exception("ERROR: User Name " + name + " is wrong");
+                String nameValidation = UserValidator.validateName(name);
+                if (!nameValidation.equals("Valid")) {
+                    throw new Exception(nameValidation);
                 }
 
-                if (!UserValidator.isValidUserId(id)) {
-                    throw new Exception("ERROR: User Id " + id + " is wrong");
+                String idValidation = UserValidator.validateUserId(id);
+                if (!idValidation.equals("Valid")) {
+                    throw new Exception(idValidation);
                 }
 
                 if (existingIds.contains(id)) {
-
                     throw new Exception("ERROR: User Id " + id + " is wrong");
                 }
                 existingIds.add(id);
@@ -106,8 +105,9 @@ public class FileHandler {
                         }
 
                         // Validate ID using the title of the found movie
-                        if (!MovieValidator.isValidMovieId(mid, found.getTitle())) {
-                            throw new Exception("ERROR: Movie Id " + midtrimmed + " is wrong");
+                        String midValidation = MovieValidator.validateMovieId(mid, found.getTitle());
+                        if (!midValidation.equals("Valid")) {
+                            throw new Exception(midValidation);
                         }
 
                         user.addLikedMovie(midtrimmed);
