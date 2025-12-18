@@ -1,5 +1,6 @@
 package org.example.model;
 
+import org.example.validator.MovieValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,46 +58,50 @@ public class MovieTest {
 
     @Test
     public void testIsValidTitle_positive() {
-        assertTrue(Movie.isValidTitle("Pride And Prejudice"), "Title starting with capital letters should be valid");
-        assertTrue(Movie.isValidTitle("A B C"), "Title with multiple words starting with uppercase should be valid");
+        assertTrue(MovieValidator.isValidTitle("Pride And Prejudice"),
+                "Title starting with capital letters should be valid");
+        assertTrue(MovieValidator.isValidTitle("A B C"),
+                "Title with multiple words starting with uppercase should be valid");
 
     }
 
     @Test
     public void testIsValidTitle_negative() {
-        assertFalse(Movie.isValidTitle("pride And Prejudice"), "Title starting with lowercase should be invalid");
-        assertFalse(Movie.isValidTitle(""), "Empty title should be invalid");
-        assertFalse(Movie.isValidTitle(null), "Null title should be invalid");
-        assertFalse(Movie.isValidTitle("-Pride And Prejudice"),
+        assertFalse(MovieValidator.isValidTitle("pride And Prejudice"),
+                "Title starting with lowercase should be invalid");
+        assertFalse(MovieValidator.isValidTitle(""), "Empty title should be invalid");
+        assertFalse(MovieValidator.isValidTitle(null), "Null title should be invalid");
+        assertFalse(MovieValidator.isValidTitle("-Pride And Prejudice"),
                 "Title starting with a special character should be invalid");
     }
 
     @Test
     public void testValidateId_valid() {
         String title = "Pride And Prejudice";
-        assertEquals("Valid", Movie.validateId("PAP123", title), "Correct ID should be valid");
-        assertEquals("Valid", Movie.validateId("PAP456", title), "Another correct ID should be valid");
+        assertEquals("Valid", MovieValidator.validateId("PAP123", title), "Correct ID should be valid");
+        assertEquals("Valid", MovieValidator.validateId("PAP456", title), "Another correct ID should be valid");
     }
 
     @Test
     public void testValidateId_invalidLetters() {
         String title = "Pride And Prejudice";
-        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("SAP123", title),
+        assertEquals("Movie Id letters {movie_id} are wrong", MovieValidator.validateId("SAP123", title),
                 "Wrong prefix should fail");
-        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId("AP123", title),
+        assertEquals("Movie Id letters {movie_id} are wrong", MovieValidator.validateId("AP123", title),
                 "Missing prefix should fail");
-        assertEquals("Movie Id letters {movie_id} are wrong", Movie.validateId(null, title), "Null ID should fail");
+        assertEquals("Movie Id letters {movie_id} are wrong", MovieValidator.validateId(null, title),
+                "Null ID should fail");
     }
 
     @Test
     public void testValidateId_invalidNumbers() {
         String title = "Pride And Prejudice";
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12", title),
+        assertEquals("Movie Id numbers {movie_id} aren't unique", MovieValidator.validateId("PAP12", title),
                 "Too short suffix should fail");
-        assertEquals("Valid", Movie.validateId("PAP112", title), "Repeated digits should be valid now");
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP12A", title),
+        assertEquals("Valid", MovieValidator.validateId("PAP112", title), "Repeated digits should be valid now");
+        assertEquals("Movie Id numbers {movie_id} aren't unique", MovieValidator.validateId("PAP12A", title),
                 "Non-digit suffix should fail");
-        assertEquals("Movie Id numbers {movie_id} aren't unique", Movie.validateId("PAP1234", title),
+        assertEquals("Movie Id numbers {movie_id} aren't unique", MovieValidator.validateId("PAP1234", title),
                 "More than 3 digits suffix should fail");
     }
 }

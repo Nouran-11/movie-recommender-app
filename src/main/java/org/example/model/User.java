@@ -18,36 +18,15 @@ public class User {
         this.likedMovieIds.add(movieId);
     }
 
-    public String getName() { return name; }
-    public String getId() { return id; }
-    public List<String> getLikedMovieIds() { return likedMovieIds; }
-
-    public static boolean isValidMovieId(String movieId){
-        if(movieId ==null || movieId.isEmpty()) return false;
-        else return true;
+    public String getName() {
+        return name;
     }
 
-
-    public static boolean isValidName(String name) {
-        if (name == null || name.isEmpty()) return false;
-        return name.matches("^[a-zA-Z][a-zA-Z\\s]*$");
+    public String getId() {
+        return id;
     }
 
-    public static boolean isValidUserId(String id) {
-        if (id == null || id.length() != 9) return false;
-
-        if (!id.matches("[a-zA-Z0-9]+")) return false;
-
-        if (!Character.isDigit(id.charAt(0))) return false;
-
-
-        char lastChar = id.charAt(8);
-        boolean lastIsLetter = Character.isLetter(lastChar);
-
-        if (lastIsLetter) {
-            if (Character.isLetter(id.charAt(7))) return false;
-        }
-
-        return true;
+    public List<String> getLikedMovieIds() {
+        return likedMovieIds;
     }
 }

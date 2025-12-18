@@ -6,11 +6,25 @@ import org.example.model.User;
 import org.example.service.Recommendation;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String movieFile = "movies.txt";
-        String userFile = "users.txt";
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to the Movie Recommender System!");
+
+        System.out.print("Please enter the path to the movies file (press Enter to use default 'movies.txt'): ");
+        String movieInput = scanner.nextLine().trim();
+        String movieFile = movieInput.isEmpty() ? "movies.txt" : movieInput;
+
+        System.out.print("Please enter the path to the users file (press Enter to use default 'users.txt'): ");
+        String userInput = scanner.nextLine().trim();
+        String userFile = userInput.isEmpty() ? "users.txt" : userInput;
+
+        System.out.println("Using movie file: " + movieFile);
+        System.out.println("Using user file: " + userFile);
+
         String outputFile = "recommendations.txt";
 
         try {
