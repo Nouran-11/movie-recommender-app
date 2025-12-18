@@ -1,11 +1,14 @@
 package org.example;
 
-import org.example.io.FileHandler;
+import org.example.io.FileReader;
+import org.example.io.FileWriter;
 import org.example.model.Movie;
 import org.example.model.User;
-import org.example.service.Recommendation;
+import org.example.service.RecommendationWriter;
+import org.example.validator.RecommendationValidator;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -29,21 +32,26 @@ public class Main {
 
         try {
 
-            List<Movie> movies = FileHandler.readMovies(movieFile);
-            List<User> users = FileHandler.readUsers(userFile, movies);
+            List<Movie> movies = FileReader.readMovies(movieFile);
+            List<User> users = FileReader.readUsers(userFile, movies);
 
-            Recommendation engine = new Recommendation();
-            engine.generateRecommendations(users, movies, outputFile);
+            // Generate recommendations (logic only)
+            RecommendationValidator validator = new RecommendationValidator();
+            Map<User, List<String>> recommendations =
+                    validator.generateRecommendations(users, movies);
 
-            System.out.println("Success! Recommendations generated.");
+            // Write recommendations to file
+            RecommendationWriter writer = new RecommendationWriter();
+            writer.writeToFile(recommendations, outputFile);
+
+            System.out.println("Success! Recommendations written to " + outputFile);
 
         } catch (Exception e) {
-
 
             String errorMsg = e.getMessage();
 
             if (errorMsg != null) {
-                FileHandler.writeError(outputFile, errorMsg);
+                FileWriter.writeError(outputFile, errorMsg);
                 System.err.println("Validation Failed. detailed error written to " + outputFile);
             } else {
                 e.printStackTrace();

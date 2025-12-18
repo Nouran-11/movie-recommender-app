@@ -9,22 +9,18 @@ import org.example.validator.UserValidator;
 import java.io.*;
 import java.util.*;
 
-public class FileHandler {
+public class FileReader {
 
     public static List<Movie> readMovies(String filePath) throws Exception {
         List<Movie> movies = new ArrayList<>();
         Set<String> usedMovieNumbers = new HashSet<>();
 
         File file = new File(filePath);
-        if (!file.exists()) {
+        if (!file.exists() || file.length() == 0) {
             throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""));
         }
 
-        if (file.length() == 0) {
-            throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""));
-        }
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(filePath))) {
             String line1;
             while ((line1 = br.readLine()) != null) {
                 String line2 = br.readLine();
@@ -70,7 +66,7 @@ public class FileHandler {
         List<User> users = new ArrayList<>();
         Set<String> existingIds = new HashSet<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(filePath))) {
             String line1;
             while ((line1 = br.readLine()) != null) {
                 String line2 = br.readLine();
@@ -131,11 +127,4 @@ public class FileHandler {
         return users;
     }
 
-    public static void writeError(String filePath, String errorMessage) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            bw.write(errorMessage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

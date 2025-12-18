@@ -10,13 +10,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
  
-public class FileHandlerTest {
+public class FileReaderTest {
 
     private File createTempFile(String content) throws IOException {
         File temp = File.createTempFile("user_test", ".txt");
         temp.deleteOnExit();
 
-        try (FileWriter writer = new FileWriter(temp)) {
+        try (java.io.FileWriter writer = new java.io.FileWriter(temp)) {
             writer.write(content);
         }
 
@@ -35,7 +35,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        List<User> users = FileHandler.readUsers(temp.getAbsolutePath(), movies);
+        List<User> users = FileReader.readUsers(temp.getAbsolutePath(), movies);
 
         assertEquals(1, users.size());
     }
@@ -50,7 +50,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(), movies));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(), movies));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(), movies));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(), movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(), movies));
     }
 
 
@@ -102,7 +102,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -150,7 +150,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -164,7 +164,7 @@ public class FileHandlerTest {
                         "TM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
 
@@ -179,7 +179,7 @@ public class FileHandlerTest {
                         "M123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class FileHandlerTest {
                         "TMM123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class FileHandlerTest {
                         "TX123\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -215,7 +215,7 @@ public class FileHandlerTest {
                         "TM111\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -227,7 +227,7 @@ public class FileHandlerTest {
                         "TM12\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
     @Test
@@ -239,7 +239,7 @@ public class FileHandlerTest {
                         "TM1A3\n";
 
         File temp = createTempFile(file);
-        assertThrows(Exception.class, () -> FileHandler.readUsers(temp.getAbsolutePath(),movies));
+        assertThrows(Exception.class, () -> FileReader.readUsers(temp.getAbsolutePath(),movies));
     }
 
    
@@ -266,7 +266,7 @@ public class FileHandlerTest {
 
         Files.write(tempFile, data.getBytes());
 
-        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
+        List<Movie> movies = FileReader.readMovies(tempFile.toString());
 
         assertEquals(2, movies.size());
         assertEquals("The Matrix", movies.get(0).getTitle());
@@ -286,7 +286,7 @@ public class FileHandlerTest {
 
         Files.write(tempFile, data.getBytes());
 
-        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
+        List<Movie> movies = FileReader.readMovies(tempFile.toString());
 
         assertEquals(2, movies.size());
         assertNotEquals("avatar", movies.get(1).getTitle());
@@ -306,7 +306,7 @@ public class FileHandlerTest {
 
         Files.write(tempFile, data.getBytes());
 
-        List<Movie> movies = FileHandler.readMovies(tempFile.toString());
+        List<Movie> movies = FileReader.readMovies(tempFile.toString());
 
         assertEquals(2, movies.size());
         assertEquals("Avatar", movies.get(1).getTitle());
@@ -325,7 +325,7 @@ public class FileHandlerTest {
         Files.write(tempFile, data.getBytes());
 
         Exception ex = assertThrows(Exception.class, () ->
-                FileHandler.readMovies(tempFile.toString())
+                FileReader.readMovies(tempFile.toString())
         );
 
         assertEquals("ERROR: Movie Id letters XX123 are wrong", ex.getMessage());
@@ -342,7 +342,7 @@ public class FileHandlerTest {
         Files.write(tempFile, data.getBytes());
 
         Exception ex = assertThrows(Exception.class, () ->
-                FileHandler.readMovies(tempFile.toString())
+                FileReader.readMovies(tempFile.toString())
         );
 
         assertEquals("ERROR: Movie Title 123WrongTitle is wrong", ex.getMessage());
@@ -352,7 +352,7 @@ public class FileHandlerTest {
         java.nio.file.Path tempPath = java.nio.file.Files.createTempFile("movies", ".txt");
 
         Exception exception = assertThrows(Exception.class, () -> {
-            FileHandler.readMovies(tempPath.toString());
+            FileReader.readMovies(tempPath.toString());
         });
 
         assertEquals("ERROR: Movie Title  is wrong", exception.getMessage());
@@ -365,7 +365,7 @@ public class FileHandlerTest {
         java.nio.file.Files.write(tempPath, data.getBytes());
 
         Exception exception = assertThrows(Exception.class, () -> {
-            FileHandler.readMovies(tempPath.toString());
+            FileReader.readMovies(tempPath.toString());
         });
         assertEquals("ERROR: Movie Title  is wrong", exception.getMessage());
         java.nio.file.Files.deleteIfExists(tempPath);
@@ -381,7 +381,7 @@ public class FileHandlerTest {
         Files.write(tempFile, data.getBytes());
 
         Exception ex = assertThrows(Exception.class, () ->
-                FileHandler.readMovies(tempFile.toString())
+                FileReader.readMovies(tempFile.toString())
         );
 
         assertEquals(
