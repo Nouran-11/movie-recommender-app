@@ -1,5 +1,6 @@
 package org.example.io;
 
+import org.example.constant.ValidationMessages;
 import org.example.model.Movie;
 import org.example.model.User;
 import org.example.validator.MovieValidator;
@@ -14,11 +15,11 @@ public class FileHandler {
         List<Movie> movies = new ArrayList<>();
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new Exception("ERROR: Movie Title  is wrong");
+            throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""));
         }
 
         if (file.length() == 0) {
-            throw new Exception("ERROR: Movie Title  is wrong");
+            throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""));
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -38,12 +39,12 @@ public class FileHandler {
                 String genre = line2.trim();
 
                 String titleValidation = MovieValidator.validateTitle(title);
-                if (!titleValidation.equals("Valid")) {
+                if (!titleValidation.equals(ValidationMessages.VALID)) {
                     throw new Exception(titleValidation);
                 }
 
                 String idValidation = MovieValidator.validateId(id, title);
-                if (!idValidation.equals("Valid")) {
+                if (!idValidation.equals(ValidationMessages.VALID)) {
                     throw new Exception(idValidation);
                 }
 
@@ -51,7 +52,7 @@ public class FileHandler {
             }
         }
         if (movies.isEmpty()) {
-            throw new Exception("ERROR: Movie Title  is wrong");
+            throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""));
         }
         return movies;
     }
@@ -73,17 +74,17 @@ public class FileHandler {
                 String id = parts[1].trim();
 
                 String nameValidation = UserValidator.validateName(name);
-                if (!nameValidation.equals("Valid")) {
+                if (!nameValidation.equals(ValidationMessages.VALID)) {
                     throw new Exception(nameValidation);
                 }
 
                 String idValidation = UserValidator.validateUserId(id);
-                if (!idValidation.equals("Valid")) {
+                if (!idValidation.equals(ValidationMessages.VALID)) {
                     throw new Exception(idValidation);
                 }
 
                 if (existingIds.contains(id)) {
-                    throw new Exception("ERROR: User Id " + id + " is wrong");
+                    throw new Exception(String.format(ValidationMessages.ERROR_USER_ID, id));
                 }
                 existingIds.add(id);
 
@@ -101,12 +102,12 @@ public class FileHandler {
                                 .orElse(null);
 
                         if (found == null) {
-                            throw new Exception("ERROR: Movie Id " + midtrimmed + " does not exist");
+                            throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_NOT_EXIST, midtrimmed));
                         }
 
                         // Validate ID using the title of the found movie
                         String midValidation = MovieValidator.validateMovieId(mid, found.getTitle());
-                        if (!midValidation.equals("Valid")) {
+                        if (!midValidation.equals(ValidationMessages.VALID)) {
                             throw new Exception(midValidation);
                         }
 

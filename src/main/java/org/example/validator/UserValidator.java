@@ -1,34 +1,39 @@
 package org.example.validator;
 
+import org.example.constant.ValidationMessages;
+
 public class UserValidator {
 
     public static String validateName(String name) {
         if (name == null || name.isEmpty())
-            return "ERROR: User Name " + name + " is wrong";
+            return String.format(ValidationMessages.ERROR_USER_NAME, name == null ? "" : name);
         if (!name.matches("^[a-zA-Z][a-zA-Z\\s]*$")) {
-            return "ERROR: User Name " + name + " is wrong";
+            return String.format(ValidationMessages.ERROR_USER_NAME, name);
         }
-        return "Valid";
+        return ValidationMessages.VALID;
     }
 
     public static String validateUserId(String id) {
-        if (id == null || id.length() != 9)
-            return "ERROR: User Id " + id + " is wrong";
+        if (id == null) // Special case for formatting null
+            return String.format(ValidationMessages.ERROR_USER_ID, "null");
+
+        if (id.length() != 9)
+            return String.format(ValidationMessages.ERROR_USER_ID, id);
 
         if (!id.matches("[a-zA-Z0-9]+"))
-            return "ERROR: User Id " + id + " is wrong";
+            return String.format(ValidationMessages.ERROR_USER_ID, id);
 
         if (!Character.isDigit(id.charAt(0)))
-            return "ERROR: User Id " + id + " is wrong";
+            return String.format(ValidationMessages.ERROR_USER_ID, id);
 
         char lastChar = id.charAt(8);
         boolean lastIsLetter = Character.isLetter(lastChar);
 
         if (lastIsLetter) {
             if (Character.isLetter(id.charAt(7)))
-                return "ERROR: User Id " + id + " is wrong";
+                return String.format(ValidationMessages.ERROR_USER_ID, id);
         }
 
-        return "Valid";
+        return ValidationMessages.VALID;
     }
 }
