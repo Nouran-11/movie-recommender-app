@@ -10,9 +10,10 @@ public class MovieValidator {
 
         String[] words = title.split(" ");
         for (String word : words) {
-            if (word.isEmpty())
+            String w = word.trim();
+            if (w.isEmpty())
                 continue;
-            if (!Character.isUpperCase(word.charAt(0))) {
+            if (!Character.isUpperCase(w.charAt(0))) {
                 return String.format(ValidationMessages.ERROR_MOVIE_TITLE, title);
             }
         }
@@ -21,6 +22,8 @@ public class MovieValidator {
 
     public static String validateId(String id, String title) {
         if (id == null || id.length() < 4)
+            // Falls under "letters ... wrong" if prefix missing or malformed?
+            // "Movie Id letters {id} are wrong"
             return String.format(ValidationMessages.ERROR_MOVIE_ID, id);
 
         StringBuilder capsInTitle = new StringBuilder();
@@ -32,15 +35,14 @@ public class MovieValidator {
         String expectedPrefix = capsInTitle.toString();
 
         if (!id.startsWith(expectedPrefix)) {
+            // Prefix wrong -> letters wrong
             return String.format(ValidationMessages.ERROR_MOVIE_ID, id);
         }
 
         String suffix = id.substring(expectedPrefix.length());
 
-        if (suffix.length() > 3 && !suffix.substring(0, suffix.length() - 3).matches("\\d*")) {
-            return String.format(ValidationMessages.ERROR_MOVIE_ID, id);
-        }
-
+        // Requirements: "3 unique numbers".
+        // Suffix must be 3 digits.
         if (suffix.length() != 3 || !suffix.matches("\\d{3}")) {
             return String.format(ValidationMessages.ERROR_MOVIE_ID_UNIQUE, id);
         }

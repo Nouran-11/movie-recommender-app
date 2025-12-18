@@ -13,6 +13,8 @@ public class FileHandler {
 
     public static List<Movie> readMovies(String filePath) throws Exception {
         List<Movie> movies = new ArrayList<>();
+        Set<String> usedMovieNumbers = new HashSet<>();
+
         File file = new File(filePath);
         if (!file.exists()) {
             throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""));
@@ -47,6 +49,13 @@ public class FileHandler {
                 if (!idValidation.equals(ValidationMessages.VALID)) {
                     throw new Exception(idValidation);
                 }
+
+
+                String numericPart = id.substring(id.length() - 3);
+                if (usedMovieNumbers.contains(numericPart)) {
+                    throw new Exception(String.format(ValidationMessages.ERROR_MOVIE_ID_UNIQUE, id));
+                }
+                usedMovieNumbers.add(numericPart);
 
                 movies.add(new Movie(title, id, genre));
             }
@@ -94,6 +103,7 @@ public class FileHandler {
                     String[] likedIds = line2.split(",");
                     for (String mid : likedIds) {
                         String midtrimmed = mid.trim();
+
 
                         // Check if this movie exists
                         Movie found = movies.stream()

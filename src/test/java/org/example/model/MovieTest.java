@@ -61,15 +61,12 @@ public class MovieTest {
 
     @Test
     public void testIsValidTitle_Empty() {
-        // Empty string -> title == "" ? "" : title -> ""
-        // ERROR: Movie Title is wrong
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""), MovieValidator.validateTitle(""),
                 "Empty title should be invalid");
     }
 
     @Test
     public void testIsValidTitle_Null() {
-        // Null -> title == null ? "" : title -> ""
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_TITLE, ""), MovieValidator.validateTitle(null),
                 "Null title should be invalid");
     }
@@ -99,9 +96,10 @@ public class MovieTest {
     @Test
     public void testValidateId_WrongPrefix() {
         String title = "Pride And Prejudice";
+        // Logic: prefix wrong -> "letters ... wrong" -> ERROR_MOVIE_ID
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID, "SAP123"),
                 MovieValidator.validateId("SAP123", title),
-                "Wrong prefix should fail");
+                "Wrong prefix should fail with letters error");
     }
 
     @Test
@@ -109,51 +107,55 @@ public class MovieTest {
         String title = "Pride And Prejudice";
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID, "AP123"),
                 MovieValidator.validateId("AP123", title),
-                "Missing prefix should fail");
+                "Missing prefix should fail with letters error");
     }
 
     @Test
     public void testValidateId_NullId() {
         String title = "Pride And Prejudice";
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID, "null"), MovieValidator.validateId(null, title),
-                "Null ID should fail");
+                "Null ID should fail with letters error");
     }
 
     @Test
     public void testValidateId_TooShortSuffix() {
         String title = "Pride And Prejudice";
-        // Logic check: "PAP12" suffix "12". length 2.
-        // Code: suffix.length() != 3 -> returns ERROR_MOVIE_ID_UNIQUE ("isn't unique").
+        // Suffix "12". length 2. Requirement: "3 unique numbers".
+        // Code: returns ERROR_MOVIE_ID_UNIQUE ("numbers ... aren't unique").
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID_UNIQUE, "PAP12"),
                 MovieValidator.validateId("PAP12", title),
-                "Too short suffix should fail");
+                "Too short suffix should fail with numbers error");
     }
 
     @Test
-    public void testValidateId_RepeatedDigitsAreValid() {
+    public void testValidateId_RepeatedDigitsAreValidInValidator() {
         String title = "Pride And Prejudice";
-        assertEquals(ValidationMessages.VALID, MovieValidator.validateId("PAP112", title), "Repeated digits is valid ");
+        // PAP112. Digits 1,1,2. Code: checks format (length 3, digits).
+        // Validator returns Valid. Global uniqueness is checked in FileHandler.
+        // User clarified: "112 is valid".
+        assertEquals(ValidationMessages.VALID, MovieValidator.validateId("PAP112", title),
+                "Repeated digits (112) should be format-valid");
     }
 
     @Test
     public void testValidateId_NonDigitSuffix() {
         String title = "Pride And Prejudice";
-        // PAP12A -> suffix 12A. Code matches failure?
-        // suffix "12A". length 3. matches \d{3} -> false.
-        // Returns ERROR_MOVIE_ID_UNIQUE ("isn't unique").
+        // PAP12A. Suffix "12A". Not numeric.
+        // Code: returns ERROR_MOVIE_ID_UNIQUE ("numbers ... aren't unique").
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID_UNIQUE, "PAP12A"),
                 MovieValidator.validateId("PAP12A", title),
-                "Non-digit suffix should fail");
+                "Non-digit suffix should fail with numbers error");
     }
 
     @Test
     public void testValidateId_TooLongSuffix() {
         String title = "Pride And Prejudice";
-        // PAP1234 -> suffix 1234. length 4.
-        // Code: suffix.length() > 3 check kicks in.
-        // Return ERROR_MOVIE_ID ("is wrong").
-        assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID, "PAP1234"),
+        // PAP1234. Suffix 1234. Length 4.
+        // Falls under "numbers ... aren't unique" category?
+        // Wait, current code logic for suffix.length() > 3:
+        // returns ERROR_MOVIE_ID_UNIQUE now.
+        assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID_UNIQUE, "PAP1234"),
                 MovieValidator.validateId("PAP1234", title),
-                "More than 3 digits suffix should fail");
+                "More than 3 digits suffix should fail with numbers error");
     }
 }
