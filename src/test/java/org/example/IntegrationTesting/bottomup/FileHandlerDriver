@@ -1,0 +1,134 @@
+// File: src/test/java/org/example/IntegrationTesting/bottomup/FileHandlerDriver.java
+package org.example.IntegrationTesting.bottomup;
+
+import org.example.io.FileHandler;
+import org.example.model.Movie;
+import org.example.model.User;
+import java.io.*;
+import java.util.List;
+
+/**
+ * DRIVER for FileHandler module
+ * Simulates how higher-level modules would call FileHandler
+ */
+public class FileHandlerDriver {
+    
+    public static void main(String[] args) {
+        System.out.println("=== FileHandler Driver (Bottom-Up Testing) ===\n");
+        
+        try {
+            System.out.println("1. Testing how Recommendation would call FileHandler...");
+            testDriverForRecommendation();
+            
+            System.out.println("\n2. Testing how Main would call FileHandler...");
+            testDriverForMain();
+            
+            System.out.println("\n✅ FileHandler Driver Test Complete!");
+            System.out.println("FileHandler is ready to be used by higher modules.");
+            
+        } catch (Exception e) {
+            System.err.println("❌ Driver test failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * DRIVER: Simulates how RecommendationService would use FileHandler
+     */
+    private static void testDriverForRecommendation() throws Exception {
+        System.out.println("  Simulating Recommendation calling FileHandler...");
+        
+        // Step 1: Read movies (like Recommendation would do first)
+        File moviesFile = createSampleMoviesFile();
+        List<Movie> movies = FileHandler.readMovies(moviesFile.getAbsolutePath());
+        System.out.println("  ✓ Read " + movies.size() + " movies");
+        
+        // Step 2: Read users with those movies (like Recommendation would do next)
+        File usersFile = createSampleUsersFile();
+        List<User> users = FileHandler.readUsers(usersFile.getAbsolutePath(), movies);
+        System.out.println("  ✓ Read " + users.size() + " users");
+        
+        // Step 3: Verify data is usable by Recommendation
+        if (users.isEmpty() || movies.isEmpty()) {
+            throw new RuntimeException("Data not usable by Recommendation");
+        }
+        
+        // Cleanup
+        moviesFile.delete();
+        usersFile.delete();
+    }
+    
+    /**
+     * DRIVER: Simulates how Main would use FileHandler
+     */
+    private static void testDriverForMain() throws Exception {
+        System.out.println("  Simulating Main program flow...");
+        
+        // Create test data files
+        File moviesFile = createTestMoviesFile();
+        File usersFile = createTestUsersFile();
+        File errorFile = File.createTempFile("error", ".txt");
+        
+        try {
+            // Main would typically do this:
+            // 1. Try to read movies
+            List<Movie> movies = FileHandler.readMovies(moviesFile.getAbsolutePath());
+            
+            // 2. Try to read users with those movies
+            List<User> users = FileHandler.readUsers(usersFile.getAbsolutePath(), movies);
+            
+            // 3. Handle any errors
+            System.out.println("  ✓ Main flow successful: " + 
+                             movies.size() + " movies, " + 
+                             users.size() + " users");
+                             
+        } catch (Exception e) {
+            // Main would handle errors
+            FileHandler.writeError(errorFile.getAbsolutePath(), e.getMessage());
+            System.out.println("  ✓ Error handling works: " + e.getMessage());
+        }
+        
+        // Cleanup
+        moviesFile.delete();
+        usersFile.delete();
+        errorFile.delete();
+    }
+    
+    private static File createSampleMoviesFile() throws IOException {
+        File file = File.createTempFile("driver_movies", ".txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("The Matrix,TM123\n");
+            writer.write("Action,Sci-Fi\n");
+            writer.write("Inception,I456\n");
+            writer.write("Action,Thriller\n");
+        }
+        return file;
+    }
+    
+    private static File createSampleUsersFile() throws IOException {
+        File file = File.createTempFile("driver_users", ".txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("Alice Johnson,12345678A\n");
+            writer.write("TM123,I456\n");
+        }
+        return file;
+    }
+    
+    private static File createTestMoviesFile() throws IOException {
+        File file = File.createTempFile("test_movies", ".txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("Test Movie,TM999\n");
+            writer.write("Test Genre\n");
+        }
+        return file;
+    }
+    
+    private static File createTestUsersFile() throws IOException {
+        File file = File.createTempFile("test_users", ".txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("Test User,999999999\n");
+            writer.write("TM999\n");
+        }
+        return file;
+    }
+}
