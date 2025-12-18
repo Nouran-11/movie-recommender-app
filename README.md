@@ -6,135 +6,120 @@
 ## 1. Project Overview
 This project implements a Java-based application for generating movie recommendations based on user preferences and genre matching. The system processes input data from text files (`movies.txt` and `users.txt`), enforces strict data validation rules, and produces a `recommendations.txt` output file.
 
-The application is designed with a **"Validation-First" architecture**: strict input validation occurs prior to any processing logic . If any data integrity violation is detected, the system halts execution and reports the specific error message as defined in the requirements specification.
+The application is designed with a **"Validation-First" architecture**: strict input validation occurs prior to any processing logic. If any data integrity violation is detected, the system halts execution and reports the specific error message as defined in the requirements specification.
 
-## 2. Project Architecture
-The source code follows a standard Maven directory layout with a modular design pattern to facilitate unit testing and separation of concerns:
+## 2. Steps to Clone
+To set up this project locally, follow these steps:
 
-```text
-src/
-├── main/java/org/example/
-│   ├── model/                  # Domain Entities & Validation Logic
-│   │   ├── Movie.java          # Encapsulates Movie data and Regex validation
-│   │   └── User.java           # Encapsulates User data and Regex validation
-│   ├── io/                     # Input/Output Operations
-│   │   └── FileHandler.java    # Handles file parsing and exception throwing
-│   ├── service/                # Business Logic
-│   │   └── Recommendation.java # Implements the genre-matching algorithm
-│   └── Main.java               # Application Entry Point
-│
-├── test/java/org/example/      # JUnit 5 Test Suite
-│   ├── model/
-│   │   ├── MovieTest.java      # Unit tests for Movie constraints
-│   │   └── UserTest.java       # Unit tests for User constraints
-│   ├── io/
-│   │   └── FileHandlerTest.java # Integration tests for file parsing
-│   └── service/
-│       └── RecommendationTest.java # Unit tests for logic
-...
-```
+1.  **Open your terminal.**
+2.  **Navigate to your desired workspace directory.**
+    ```bash
+    cd /path/to/your/workspace
+    ```
+3.  **Clone the repository:**
+    ```bash
+    git clone <repository_url>
+    ```
+4.  **Navigate into the project directory:**
+    ```bash
+    cd movie-recommender-app
+    ```
 
-# 3. Implemented Validation Rules
+## 3. Usage Instructions
+### Prerequisites
+- **Java JDK 17+** (Ensure `java` and `javac` are in your PATH)
+- **Maven** (Optional, for building/testing if using `pom.xml`)
 
-The following validation constraints have been implemented using Java Regular Expressions (Regex) and logic checks:
+### Running the Application
+1.  **Prepare Input Files:**
+    Ensure `movies.txt` and `users.txt` are present in the project root directory.
+    - **`movies.txt` format:**
+      ```text
+      Movie Title,ID
+      Genre1, Genre2
+      ```
+    - **`users.txt` format:**
+      ```text
+      UserName,UserID
+      LikedMovieID1, LikedMovieID2
+      ```
 
-## 3.1. Movie Data Validation
+2.  **Compile the Code:**
+    ```bash
+    javac -d target/classes src/main/java/org/example/validator/*.java src/main/java/org/example/model/*.java src/main/java/org/example/io/*.java src/main/java/org/example/service/*.java src/main/java/org/example/Main.java
+    ```
 
-- **Title Format:**  
-  Validated to ensure every word begins with a capital letter.
+3.  **Run Main Class:**
+    ```bash
+    java -cp target/classes org.example.Main
+    ```
 
-- **ID Format:**  
-  Validated to ensure it contains all capital letters derived from the title, followed by **exactly three unique digits**.
+4.  **Follow Interactive Prompts:**
+    The application will ask for file paths. Press **Enter** to use defaults.
+    ```text
+    Please enter the path to the movies file (press Enter to use default 'movies.txt'):
+    Please enter the path to the users file (press Enter to use default 'users.txt'):
+    ```
 
-- **Uniqueness Check:**  
-  The system verifies that the numeric portion of the ID contains **distinct digits** (e.g., `123` is valid; `112` is invalid).
+5.  **View Output:**
+    Check `recommendations.txt` in the project root for the results or error messages.
 
-## 3.2. User Data Validation
+## 4. System Design
+### Architecture Overview
+The system follows a modular **Layered Architecture**:
 
-- **Name Format:**  
-  Validated to contain only alphabetic characters and spaces. Leading spaces are strictly prohibited.
+1.  **Presentation Layer (`Main.java`):**
+    - Handles user interaction via console (inputs/outputs).
+    - Orchestrates the flow between file handling and recommendation service.
 
-- **ID Format:**  
-  Validated to be exactly **9 alphanumeric characters**. It must:
-  - Commence with a digit  
-  - May end with **at most one alphabetic character**
+2.  **Input/Output Layer (`io` package):**
+    - `FileHandler.java`: Responsible for reading files and converting raw text into domain objects. It strictly coordinates validation.
 
----
+3.  **Domain Layer (`model` package):**
+    - `Movie.java`: POJO representing a movie.
+    - `User.java`: POJO representing a user.
+    - **Note:** Validation logic is decoupled from these POJOs.
 
-# 4. Testing Strategy
+4.  **Validator Layer (`validator` package):**
+    - `MovieValidator.java`: Contains static methods for validating movie titles and IDs.
+    - `UserValidator.java`: Contains static methods for validating user names and IDs.
+    - This separation promotes the **Single Responsibility Principle**.
 
-A comprehensive automated testing suite has been developed using **JUnit 5**
+5.  **Service Layer (`service` package):**
+    - `Recommendation.java`: Contains the core business logic algorithm `generateRecommendations` which matches users to movies based on liked genres.
 
-## 4.1. Test Class Breakdown
+## 5. Implementation Details
+### Validation Logic
+The application employs strict **Regex-based** validation:
+- **Movies:**
+  - Titles must Start Capitalized.
+  - IDs must match title initials + 3 unique digits (e.g., `Inception` -> `I123`).
+- **Users:**
+  - Names: Alphabets only, no leading spaces.
+  - IDs: 9 Alphanumeric characters, must start with a digit.
 
-### **MovieTest — Movie**
-- Verifies strict capitalization rules (rejects lowercase titles)  
-- Ensures ID prefixes match capital letters from the title  
-- Tests boundary conditions for the “3 unique numbers” ID rule  
+### Recommendation Algorithm
+1.  Identify genres liked by the user based on their `users.txt` history.
+2.  Scan all available movies in `movies.txt`.
+3.  Filter movies that match at least one liked genre.
+4.  **Exclude** movies the user has already liked/watched.
+5.  Format the output as `MovieTitle` in the recommendations file.
 
-### **UserTest — User**
-- Tests boundary values for User ID length (8 vs 9 chars)  
-- Fails invalid name formats (numeric prefixes, special characters)  
-- Enforces **no leading space** rule  
+## 6. Testing Structure
+Tests are refactored to enforce **One Assertion Per Test Method** for clarity and easier debugging.
 
-### **FileHandlerTest — FileHandler**
-Integration test validating:
-- Real-world file parsing using temporary files  
-- Correct error messages for edge cases: empty files, missing genre lines, malformed IDs  
+### Test Classes (`src/test/java`)
+- `MovieTest`: Tests `Movie` POJO and `MovieValidator`. Validates title format and ID constraints.
+- `UserTest`: Tests `User` POJO and `UserValidator`. Validates name format and ID constraints.
+- `RecommendationTest`: Tests the `Recommendation` service logic. 
+  - **Happy Path:** Single user, Multiple users.
+  - **Edge Cases:** User likes all movies, No users, Empty movie list.
 
-### **RecommendationTest — Recommendation**
-- Validates genre-matching algorithm  
-- Excludes movies already watched by the user  
-- Handles boundary cases: empty movie list, user watched all movies  
-
----
-
-# 5. Bug Tracking & Resolution
-
-Some of the critical defects identified during integration testing were documented in Jira and resolved.
-
-## Resolved Defects
-
-### **Validation Bypass (Leading Whitespace)**
-- **Issue:** Parser trimmed whitespace, allowing names like `" John"` to pass.  
-- **Fix:** Removed automatic trimming to enforce **No leading space**.
-
-### **Silent Failure on Empty Input**
-- **Issue:** Empty `movies.txt` resulted in “successful” execution with no output.  
-- **Fix:** Added a check to throw:  
-  `ERROR: Movie Title is wrong`  
-  when the file is empty.
-
-### **Error Message Compliance**
-- **Issue:** Error messages were generic (e.g., `"Error in movie id letters"`).  
-- **Fix:** Updated to match exact required format, e.g.:  
-  `Movie Id letters {id} are wrong`
-
----
-
-# 6. Usage Instruction
-
-- **Prerequisites:**  
-  Java **JDK 17+ (or 8+)** and **Maven**
-
-- **Input Files:**  
-  Place `movies.txt` and `users.txt` in the project root
-
-- **Execution:**  
-  Run the `Main` class
-
-- **Output:**  
-  Review `recommendations.txt` for final recommendations or errors
-
----
-
-# 7. Contributors
-
-- [Nouran Atef] — ID: **[2200165]**  
-- [Fatma Mohamed] — ID: **[2200558]**  
-- [Aya Mohamed] — ID: **[2200716]**  
-- [Menna Mohamed] — ID: **[2200806]**  
-- [Menna Tarik] — ID: **[2200600]**  
+## 7. Contributors
+- [Nouran Atef] — ID: **[2200165]**
+- [Fatma Mohamed] — ID: **[2200558]**
+- [Aya Mohamed] — ID: **[2200716]**
+- [Menna Mohamed] — ID: **[2200806]**
+- [Menna Tarik] — ID: **[2200600]**
 - [Aaesha Mahmod] — ID: **[2200510]**
 - [Jumana Waleed] — ID: **[2200362]**
-
