@@ -2,14 +2,17 @@ package org.example.model;
 
 import org.example.constant.ValidationMessages;
 import org.example.validator.MovieValidator;
+import org.example.validator.RecommendationValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * JUnit tests for Movie class
- */
+
 public class MovieTest {
 
     private Movie movie;
@@ -157,5 +160,19 @@ public class MovieTest {
         assertEquals(String.format(ValidationMessages.ERROR_MOVIE_ID_UNIQUE, "PAP1234"),
                 MovieValidator.validateId("PAP1234", title),
                 "More than 3 digits suffix should fail with numbers error");
+    }
+    @Test
+    void likedMovieIdNotInMovieList() {
+        Movie ironMan = new Movie("Iron Man", "IM123", "Action");
+        List<Movie> movies = List.of(ironMan);
+
+        User alice = new User("Alice","123");
+        alice.addLikedMovie("UNKNOWN"); // ID not in movieMap
+
+        RecommendationValidator validator = new RecommendationValidator();
+        Map<User, List<String>> result =
+                validator.generateRecommendations(List.of(alice), movies);
+
+        assertTrue(result.get(alice).isEmpty());
     }
 }
