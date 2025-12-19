@@ -8,10 +8,9 @@ import java.util.Map;
 
 import org.example.model.Movie;
 import org.example.model.User;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RecommendationWriterTest {
 
@@ -63,4 +62,23 @@ public class RecommendationWriterTest {
 
         assertTrue(lines.isEmpty());
     }
+
+    @Test
+    void handlesIOExceptionGracefully() {
+        RecommendationWriter writer = new RecommendationWriter();
+
+        User alice = new User("Alice", "12345678A");
+
+        // Invalid path to force IOException
+        String invalidPath = "Z:\\this_path_does_not_exist\\file.txt";
+
+        writer.writeToFile(
+                Map.of(alice, List.of("Interstellar")),
+                invalidPath
+        );
+
+        // No exception should be thrown (method handles it internally)
+        assertTrue(true);
+    }
+
 }
