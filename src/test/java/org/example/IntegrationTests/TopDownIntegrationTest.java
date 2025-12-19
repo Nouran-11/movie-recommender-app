@@ -34,11 +34,9 @@ class TopDownIntegrationTest {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
 
-        // Create temporary files
         moviesFile = tempDir.resolve("movies.txt");
         usersFile = tempDir.resolve("users.txt");
-        outputFile = Paths.get("recommendations.txt"); // Main uses relative path "recommendations.txt"
-
+        outputFile = Paths.get("recommendations.txt");
         Files.write(moviesFile, List.of(
                 "The Matrix,TM123",
                 "Sci-Fi",
@@ -63,30 +61,22 @@ class TopDownIntegrationTest {
 
     @Test
     void testMainFlow() throws IOException {
-        // Prepare input for Scanner: movie path + newline + user path + newline
         String simulatedInput = moviesFile.toAbsolutePath().toString() + System.lineSeparator() +
                 usersFile.toAbsolutePath().toString() + System.lineSeparator();
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
 
-        // Run Main
         Main.main(new String[] {});
 
-        // Verify Console Output
         String output = outContent.toString();
         assertTrue(output.contains("Welcome to the Movie Recommender System!"), "Welcome message missing");
         assertTrue(output.contains("Success! Recommendations written to recommendations.txt"),
                 "Success message missing");
 
-        // Verify Output File Existence
         assertTrue(Files.exists(outputFile), "Output file should have been created");
 
-        // Verify Output Content
         List<String> lines = Files.readAllLines(outputFile);
         assertFalse(lines.isEmpty(), "Output file shouldn't be empty");
-        // user line
         assertTrue(lines.stream().anyMatch(line -> line.contains("Alice, 12345678A")));
-        // rec line (Alice likes 1 & 2 (Sci-Fi, Crime). Inception is 3 (Sci-Fi). Should
-        // recommend Inception)
         assertTrue(lines.stream().anyMatch(line -> line.contains("Inception")));
     }
 }
